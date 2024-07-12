@@ -54,7 +54,7 @@ services:
     networks:
       - cqt-net
     volumes:
-      - ./data/.lighthouse:/data/.lighthouse
+      - ./data/.lighthouse:/root/.lighthouse
       - ./scripts/start-lighthouse.sh:/scripts/start-lighthouse.sh:ro
       - ./secrets/jwt.hex:/jwt.hex
       - /etc/timezone:/etc/timezone:ro
@@ -69,14 +69,17 @@ services:
 
   ipfs:
     image: "ghcr.io/covalenthq/ipfs-pinner:latest"
+    # build:
+    #   context: ipfs-pinner
     container_name: ipfs
     restart: unless-stopped
     depends_on:
       - agent
     volumes:
+      - ./scripts/start-ipfs.sh:/scripts/start-ipfs.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    entrypoint: /opt/ipfs-pinner/bin/server
+    entrypoint: sh /scripts/start-ipfs.sh
     env_file: [".env"]
     networks:
       - cqt-net
@@ -94,8 +97,6 @@ services:
       - geth
     volumes:
       - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
-      - ./data/agent/bin/:/app/bin
-      - ./data/agent/logs/:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     entrypoint: sh /scripts/start-agent.sh
