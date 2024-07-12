@@ -1,0 +1,7 @@
+!.gitignore
+.env
+
+data/*
+!data/.gitignore
+
+jwt.hex

@@ -1,0 +1,114 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    expose:
+      - 6379
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - cqt-net
+    entrypoint: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    logging:
+      options:
+        max-size: "1g"
+
+  geth:
+    image: "ghcr.io/covalenthq/bsp-geth:latest"
+    container_name: execution
+    restart: unless-stopped
+    stop_grace_period: 1m
+    env_file: [".env"]
+    depends_on:
+      - redis
+    networks:
+      - cqt-net
+    ports:
+      - 30303:30303/tcp # p2p
+      - 30303:30303/udp # p2p
+      - 8545:8545
+      - 8551:8551
+    volumes:
+      - ./data/.ethereum/:/data/.ethereum
+      - ./scripts/start-geth.sh:/scripts/start-geth.sh:ro
+      - ./secrets/jwt.hex:/jwt.hex
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    entrypoint: sh /scripts/start-geth.sh
+    logging:
+      options:
+        max-size: "1g"
+
+  lighthouse:
+    image: sigp/lighthouse:latest
+    container_name: consensus
+    restart: unless-stopped
+    stop_grace_period: 1m
+    networks:
+      - cqt-net
+    volumes:
+      - ./data/.lighthouse:/data/.lighthouse
+      - ./scripts/start-lightouse.sh:/scripts/start-lightouse.sh:ro
+      - ./secrets/jwt.hex:/jwt.hex
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5052:5052
+    env_file: [".env"]
+    entrypoint: sh /scripts/start-lightouse.sh
+    logging:
+      options:
+        max-size: "1g"
+
+  ipfs:
+    image: "ghcr.io/covalenthq/ipfs-pinner:latest"
+    container_name: ipfs
+    restart: unless-stopped
+    depends_on:
+      - agent
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    entrypoint: /opt/ipfs-pinner/bin/server
+    env_file: [".env"]
+    networks:
+      - cqt-net
+    ports:
+      - "3001:3001"
+    logging:
+      options:
+        max-size: "1g"
+
+  agent:
+    image: "ghcr.io/covalenthq/bsp-agent:latest"
+    container_name: bsp-agent
+    restart: unless-stopped
+    depends_on:
+      - geth
+    volumes:
+      - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
+      - ./data/agent/bin/:/app/bin
+      - ./data/agent/logs/:/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    entrypoint: sh /scripts/start-agent.sh
+    env_file: [".env"]
+    networks:
+      - cqt-net
+    ports:
+      - "8080:8080"
+    logging:
+      options:
+        max-size: "1g"
+
+networks:
+  cqt-net:
+    name: cqt-net
+    driver: bridge
