@@ -55,14 +55,14 @@ services:
       - cqt-net
     volumes:
       - ./data/.lighthouse:/data/.lighthouse
-      - ./scripts/start-lightouse.sh:/scripts/start-lightouse.sh:ro
+      - ./scripts/start-lighthouse.sh:/scripts/start-lighthouse.sh:ro
       - ./secrets/jwt.hex:/jwt.hex
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5052:5052
     env_file: [".env"]
-    entrypoint: sh /scripts/start-lightouse.sh
+    entrypoint: sh /scripts/start-lighthouse.sh
     logging:
       options:
         max-size: "1g"
