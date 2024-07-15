@@ -8,5 +8,5 @@ exec ./bsp-agent \
     --log-folder="./logs" \
     --ipfs-pinner-server="http://ipfs:3001" \
     --block-divisor=35 \
-    --proof-chain-address=0x7487b04899c2572A223A8c6eC9bA919e27BBCd36 \
+    --proof-chain-address=$PROOF_CHAIN_ADDR \
     --consumer-timeout=10000000
