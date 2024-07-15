@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   redis:
-    image: redis:alpine
+    image: redis:${REDIS_VERSION:-alpine}
     container_name: redis
     restart: unless-stopped
     expose:
@@ -21,7 +21,7 @@ services:
         max-size: "1g"
 
   geth:
-    image: "ghcr.io/covalenthq/bsp-geth:latest"
+    image: "ghcr.io/covalenthq/bsp-geth:${BSP_GETH_VERSION:-latest}"
     container_name: execution
     restart: unless-stopped
     stop_grace_period: 1m
@@ -47,7 +47,7 @@ services:
         max-size: "1g"
 
   lighthouse:
-    image: sigp/lighthouse:latest
+    image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-latest}
     container_name: consensus
     restart: unless-stopped
     stop_grace_period: 1m
@@ -68,9 +68,7 @@ services:
         max-size: "1g"
 
   ipfs:
-    image: "ghcr.io/covalenthq/ipfs-pinner:latest"
-    # build:
-    #   context: ipfs-pinner
+    image: "us-docker.pkg.dev/covalent-project/network/ipfs-pinner:${IPFS_PINNER_VERSION:-stable}"
     container_name: ipfs
     restart: unless-stopped
     depends_on:
@@ -79,6 +77,7 @@ services:
       - ./scripts/start-ipfs.sh:/scripts/start-ipfs.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./proof.out:/proof.out:ro
     entrypoint: sh /scripts/start-ipfs.sh
     env_file: [".env"]
     networks:
@@ -90,7 +89,7 @@ services:
         max-size: "1g"
 
   agent:
-    image: "ghcr.io/covalenthq/bsp-agent:latest"
+    image: "ghcr.io/covalenthq/bsp-agent:${BSP_AGENT_VERSION:-latest}"
     container_name: bsp-agent
     restart: unless-stopped
     depends_on:

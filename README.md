@@ -1,6 +1,6 @@
 # Covalent BSP Node
 
-This is a draft for a covalent BSP production ready containerized environment. 
+This repo will help you with the setup of a covalent BSP production ready containerized environment. 
 
 # Requirements
 
@@ -37,6 +37,14 @@ Copy the `default.env` file to `.env` in the root folder and modify its values a
 ```bash
 cp default.env .env
 ```
+
+## Ask in the discord for the AGENT_KEY and DELEGATION_PROOF_FILE
+
+For ipfs pinner service those variables need to be specified, ask for them in the covalent discord in order to get started. After getting the `DELEGATION_PROOF_FILE` you should place it in the root folder of this repo and name it as `proof.out`.
+
+# References
+
+You should always refer back to the official documentation [Covalent Docs](https://www.covalenthq.com/docs/nodes/block-specimen-producer-onboarding/setup).
 
 # License
 

@@ -5,3 +5,5 @@ data/*
 !data/.gitignore
 
 jwt.hex
+
+proof.out
