@@ -36,7 +36,7 @@ services:
       - 8545:8545
       - 8551:8551
     volumes:
-      - ./data/.ethereum/:/data/.ethereum
+      - ./data/ethereum/:/data/.ethereum
       - ./scripts/start-geth.sh:/scripts/start-geth.sh:ro
       - ./secrets/jwt.hex:/jwt.hex
       - /etc/timezone:/etc/timezone:ro
@@ -54,7 +54,7 @@ services:
     networks:
       - cqt-net
     volumes:
-      - ./data/.lighthouse:/root/.lighthouse
+      - ./data/lighthouse:/root/.lighthouse
       - ./scripts/start-lighthouse.sh:/scripts/start-lighthouse.sh:ro
       - ./secrets/jwt.hex:/jwt.hex
       - /etc/timezone:/etc/timezone:ro
@@ -71,13 +71,11 @@ services:
     image: "us-docker.pkg.dev/covalent-project/network/ipfs-pinner:${IPFS_PINNER_VERSION:-stable}"
     container_name: ipfs
     restart: unless-stopped
-    depends_on:
-      - agent
     volumes:
       - ./scripts/start-ipfs.sh:/scripts/start-ipfs.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./proof.out:/proof.out:ro
+      - ./secrets/proof.out:/proof.out:ro
     entrypoint: sh /scripts/start-ipfs.sh
     env_file: [".env"]
     networks:
@@ -92,8 +90,6 @@ services:
     image: "ghcr.io/covalenthq/bsp-agent:${BSP_AGENT_VERSION:-latest}"
     container_name: bsp-agent
     restart: unless-stopped
-    depends_on:
-      - geth
     volumes:
       - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
       - /etc/timezone:/etc/timezone:ro

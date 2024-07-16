@@ -40,7 +40,7 @@ cp default.env .env
 
 ## Ask in the discord for the AGENT_KEY and DELEGATION_PROOF_FILE
 
-For ipfs pinner service those variables need to be specified, ask for them in the covalent discord in order to get started. After getting the `DELEGATION_PROOF_FILE` you should place it in the root folder of this repo and name it as `proof.out`.
+For ipfs pinner service those variables need to be specified, ask for them in the covalent discord in order to get started. After getting the `DELEGATION_PROOF_FILE` you should place it in the `secrets` folder of this repo and name it as `proof.out`.
 
 # References
 

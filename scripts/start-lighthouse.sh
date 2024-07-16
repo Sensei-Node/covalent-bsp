@@ -5,5 +5,5 @@ exec lighthouse bn \
     --execution-endpoint http://execution:8551 \
     --http --http-address 0.0.0.0 \
     --execution-jwt /jwt.hex \
-    --checkpoint-sync-url https://mainnet.checkpoint.sigp.io \
+    --checkpoint-sync-url https://sync.invis.tools \
     --disable-deposit-contract-sync
