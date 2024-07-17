@@ -15,6 +15,6 @@ exec geth \
     --authrpc.jwtsecret=/jwt.hex \
     --authrpc.addr=0.0.0.0 \
     --authrpc.port=8551 --authrpc.vhosts=* \
-    --replication.targets=redis://redis:6379/0?topic=replication \
+    --replication.targets=redis://redis:6379/?topic=replication \
     --replica.result --replica.specimen \
-	--replica.blob --log.file=/data/.ethereum/geth/log.log
+    --replica.blob --log.file=/data/.ethereum/geth/log.log

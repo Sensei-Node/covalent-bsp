@@ -91,6 +91,7 @@ services:
     container_name: bsp-agent
     restart: unless-stopped
     volumes:
+      - ./data/bsp-agent:/data
       - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
