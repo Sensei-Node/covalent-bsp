@@ -2,7 +2,7 @@
 
 # exec tail -f /dev/null
 exec ./bsp-agent \
-    --redis-url="redis://redis:6379/?topic=replication" \
+    --redis-url="redis://redis:6379/0?topic=replication" \
     --avro-codec-path="./codec/block-ethereum.avsc" \
     --binary-file-path="./bin/block-ethereum/" \
     --log-folder="./logs" \
