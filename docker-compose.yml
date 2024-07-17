@@ -7,11 +7,8 @@ services:
     restart: unless-stopped
     expose:
       - 6379
-    environment:
-      - REDIS_REPLICATION_MODE=master
     networks:
       - cqt-net
-    entrypoint: redis-server
     ports:
       - "6379:6379"
     volumes:
@@ -91,7 +88,7 @@ services:
     container_name: bsp-agent
     restart: unless-stopped
     volumes:
-      - ./data/bsp-agent:/data
+      - bsp-agent:/app/data
       - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -109,3 +106,6 @@ networks:
   cqt-net:
     name: cqt-net
     driver: bridge
+
+volumes:
+  bsp-agent:

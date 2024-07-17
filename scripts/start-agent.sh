@@ -7,6 +7,6 @@ exec ./bsp-agent \
     --binary-file-path="./bin/block-ethereum/" \
     --log-folder="./logs" \
     --ipfs-pinner-server="http://ipfs:3001" \
-    --block-divisor=35 \
+    --block-divisor=3 \
     --proof-chain-address=$PROOF_CHAIN_ADDR \
-    --consumer-timeout=10000000
+    --consumer-timeout=15
