@@ -64,21 +64,24 @@ services:
       options:
         max-size: "1g"
 
-  ipfs:
-    image: "us-docker.pkg.dev/covalent-project/network/ipfs-pinner:${IPFS_PINNER_VERSION:-stable}"
-    container_name: ipfs
-    restart: unless-stopped
+  ewm-das:
+    image: "us-docker.pkg.dev/covalent-project/network/ewm-das:${EWM_DAS_IPFS_VERSION:-stable}"
     volumes:
       - ./scripts/start-ipfs.sh:/scripts/start-ipfs.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./secrets/proof.out:/proof.out:ro
-    entrypoint: sh /scripts/start-ipfs.sh
+      - ./ipfs:/root/.ipfs/
+    container_name: ewm-das
+    restart: on-failure
     env_file: [".env"]
+    entrypoint: sh /scripts/start-ipfs.sh
     networks:
       - cqt-net
     ports:
+      - "4001:4001"
       - "3001:3001"
+      - "5080:5080"
     logging:
       options:
         max-size: "1g"
