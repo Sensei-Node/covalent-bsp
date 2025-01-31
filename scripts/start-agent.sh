@@ -6,7 +6,7 @@ exec ./bsp-agent \
     --avro-codec-path="./codec/block-ethereum.avsc" \
     --binary-file-path="./bin/block-ethereum/" \
     --log-folder="./logs" \
-    --ipfs-pinner-server="http://ipfs:3001" \
-    --block-divisor=3 \
+    --ipfs-pinner-server="http://ewm-das:5080/api/v1" \
+    --block-divisor=35 \
     --proof-chain-address=$PROOF_CHAIN_ADDR \
-    --consumer-timeout=15
+    --consumer-timeout=10000000
