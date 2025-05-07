@@ -90,11 +90,14 @@ services:
     image: "us-docker.pkg.dev/covalent-project/network/bsp-agent:${BSP_AGENT_VERSION:-latest}"
     container_name: bsp-agent
     restart: unless-stopped
+    depends_on:
+      - redis
     volumes:
       - bsp-agent:/app/data
       - ./scripts/start-agent.sh:/scripts/start-agent.sh:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./block-ethereum.avsc:/app/codec/block-ethereum.avsc:ro
     entrypoint: sh /scripts/start-agent.sh
     env_file: [".env"]
     networks:
@@ -104,6 +107,17 @@ services:
     logging:
       options:
         max-size: "1g"
+
+  restart-on-agent-failure:
+    image: docker:latest
+    container_name: restart-on-agent-failure
+    restart: "no"
+    depends_on:
+      - agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts/restart-on-agent-failure.sh:/scripts/restart-on-agent-failure.sh:ro
+    entrypoint: sh /scripts/restart-on-agent-failure.sh
 
 networks:
   cqt-net:

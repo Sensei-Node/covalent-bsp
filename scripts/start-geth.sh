@@ -1,8 +1,12 @@
 #!/bin/sh
 
+apt update && apt install -y curl
+
 exec geth \
     --mainnet --log.debug \
     --cache=8192 --syncmode=snap \
+    --v5disc=true  --txlookuplimit=0 \
+    --light.ingress=200 --light.egress=200 --light.maxpeers=3 \
     --http=true --http.addr=0.0.0.0 \
     --http.api=admin,debug,eth,net,web3,txpool \
     --http.vhosts=* --ws=true \
